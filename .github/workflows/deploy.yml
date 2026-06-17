@@ -52,7 +52,15 @@ jobs:
       - name: Install Ansible and SSHPass
         run: |
           sudo apt-get update
-          sudo apt-get install -y ansible sshpass
+          sudo apt-get install -y ansible sshpass netcat-openbsd
+
+      - name: Start Infrastructure (Docker)
+        run: |
+          docker compose up -d
+          # Wait for SSH to be ready on port 2222
+          echo "Waiting for SSH to be ready..."
+          timeout 60s bash -c 'until nc -z localhost 2222; do sleep 2; done'
+          echo "SSH is ready!"
 
       - name: Run Ansible Playbook
         run: ansible-playbook -i inventory.ini playbook.yml
