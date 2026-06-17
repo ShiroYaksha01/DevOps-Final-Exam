@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; display: flex; }
+        .form-container { flex: 1; padding-right: 20px; }
+        .preview-container { flex: 1; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-weight: bold; }
+        input, select { width: 100%; padding: 5px; }
+        
+        /* ID Card Preview Styles */
+        .id-card {
+            width: 240px;
+            height: 380px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .id-header {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .id-type {
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .id-photo {
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            border: 2px solid #ddd;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        .id-details {
+            width: 100%;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Create Profile</h2>
+        <form action="/profiles/create" method="post" enctype="multipart/form-data" th:object="${profile}">
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" th:field="*{fullName}" id="fullName" oninput="updatePreview()" required />
+            </div>
+            
+            <div class="form-group">
+                <label>Type</label>
+                <select th:field="*{type}" id="type" onchange="updatePreview()">
+                    <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Department</label>
+                <input type="text" th:field="*{department}" id="department" oninput="updatePreview()" />
+            </div>
+            
+            <div class="form-group">
+                <label>Photo (JPEG/PNG)</label>
+                <input type="file" name="photo" id="photo" accept="image/png, image/jpeg" onchange="previewPhoto(event)" />
+            </div>
+            
+            <button type="submit">Save Profile</button>
+            <a href="/profiles">Cancel</a>
+        </form>
+    </div>
+    
+    <div class="preview-container">
+        <h2>Live Preview</h2>
+        <div class="id-card" id="cardPreview">
+            <div class="id-header" id="previewOrg">OrderZone Institution</div>
+            <div class="id-type" id="previewType">STUDENT ID CARD</div>
+            <img class="id-photo" id="previewPhotoImg" src="" alt="Photo" style="display:none;"/>
+            <div class="id-photo" id="previewPhotoPlaceholder">No Photo</div>
+            <div class="id-details">
+                <strong>Name:</strong> <span id="previewName"></span><br/>
+                <strong>Dept:</strong> <span id="previewDept"></span><br/>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updatePreview() {
+            document.getElementById('previewName').innerText = document.getElementById('fullName').value;
+            document.getElementById('previewType').innerText = document.getElementById('type').value + ' ID CARD';
+            document.getElementById('previewDept').innerText = document.getElementById('department').value;
+        }
+        
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewPhotoImg').src = e.target.result;
+                    document.getElementById('previewPhotoImg').style.display = 'block';
+                    document.getElementById('previewPhotoPlaceholder').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Initialize
+        updatePreview();
+    </script>
+</body>
+</html>

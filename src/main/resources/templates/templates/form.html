@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Template</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-weight: bold; }
+        input, select { width: 300px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h2>Create Template</h2>
+    <form action="/templates/create" method="post" th:object="${template}">
+        
+        <div class="form-group">
+            <label>Code (e.g. STD-01)</label>
+            <input type="text" th:field="*{code}" required />
+        </div>
+        
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" th:field="*{name}" required />
+        </div>
+        
+        <div class="form-group">
+            <label>Organization Name</label>
+            <input type="text" th:field="*{organizationName}" />
+        </div>
+        
+        <div class="form-group">
+            <label>Layout</label>
+            <select th:field="*{layout}">
+                <option value="VERTICAL">Vertical</option>
+                <option value="HORIZONTAL">Horizontal</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Primary Color Hex</label>
+            <input type="text" th:field="*{primaryColor}" value="#1d4ed8" />
+        </div>
+        
+        <button type="submit">Save Template</button>
+        <a href="/templates">Cancel</a>
+    </form>
+</body>
+</html>

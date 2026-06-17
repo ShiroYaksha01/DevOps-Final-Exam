@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .id-card {
+            width: 240px;
+            height: 380px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .id-header { font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: center; }
+        .id-type { font-size: 12px; margin-bottom: 10px; color: #555; }
+        .id-photo { width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd; margin-bottom: 10px; }
+        .id-details { width: 100%; font-size: 12px; line-height: 1.5; margin-bottom: 10px; }
+        .codes { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .qr-code { width: 60px; height: 60px; }
+        .barcode { width: 120px; height: 40px; }
+    </style>
+</head>
+<body>
+    <h2>Profile View</h2>
+    <a href="/profiles">Back to List</a> | <a th:href="@{/profiles/{id}/export-pdf(id=${profile.id})}">Export PDF</a>
+    <br/><br/>
+    
+    <div class="id-card">
+        <div class="id-header">OrderZone Institution</div>
+        <div class="id-type" th:text="${profile.type} + ' ID CARD'">TYPE ID CARD</div>
+        
+        <img th:if="${profile.photoFileName}" th:src="@{/uploads/{filename}(filename=${profile.photoFileName})}" class="id-photo" alt="Photo" />
+        <div th:unless="${profile.photoFileName}" class="id-photo" style="background-color: #eee; display:flex; align-items:center; justify-content:center;">No Photo</div>
+        
+        <div class="id-details">
+            <strong>Name:</strong> <span th:text="${profile.fullName}"></span><br/>
+            <strong>Reg No:</strong> <span th:text="${profile.registrationNumber}"></span><br/>
+            <strong>Dept:</strong> <span th:text="${profile.department}"></span>
+        </div>
+        
+        <div class="codes">
+            <img th:src="@{'data:image/png;base64,' + ${qrCodeBase64}}" class="qr-code" alt="QR Code"/>
+            <img th:src="@{'data:image/png;base64,' + ${barcodeBase64}}" class="barcode" alt="Barcode"/>
+        </div>
+    </div>
+</body>
+</html>

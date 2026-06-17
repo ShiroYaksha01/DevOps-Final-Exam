@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Templates</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Templates</h2>
+    <a href="/">Back to Home</a> | <a href="/templates/create">Create New Template</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Layout</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="template : ${templates}">
+                <td th:text="${template.id}">1</td>
+                <td th:text="${template.code}">STD-01</td>
+                <td th:text="${template.name}">Standard Student</td>
+                <td th:text="${template.layout}">VERTICAL</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profiles</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Profiles</h2>
+    <a href="/">Back to Home</a> | <a href="/profiles/create">Create New Profile</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Reg No</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="profile : ${profiles}">
+                <td th:text="${profile.id}">1</td>
+                <td th:text="${profile.registrationNumber}">123</td>
+                <td th:text="${profile.fullName}">John Doe</td>
+                <td th:text="${profile.type}">STUDENT</td>
+                <td>
+                    <a th:href="@{/profiles/{id}(id=${profile.id})}">View Card</a> |
+                    <a th:href="@{/profiles/{id}/export-pdf(id=${profile.id})}">Export PDF</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
