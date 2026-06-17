@@ -1,0 +1,45 @@
+---
+- name: Web Server Tasks
+  hosts: webserver
+  gather_facts: no
+  tasks:
+    - name: Fetch ex03 branch and git pull
+      shell: |
+        cd /app/DevOps-Final-Exam
+        git fetch origin ex03
+        git checkout ex03
+        git reset --hard origin/ex03
+      register: git_pull_result
+      
+    - name: Show git output
+      debug:
+        var: git_pull_result.stdout_lines
+
+    - name: Build using Maven
+      shell: |
+        cd /app/DevOps-Final-Exam
+        mvn clean compile
+      register: mvn_compile_result
+      
+    - name: Show Maven Build output
+      debug:
+        var: mvn_compile_result.stdout_lines
+
+    - name: Run test against SQLite db
+      shell: |
+        cd /app/DevOps-Final-Exam
+        mvn test
+      register: mvn_test_result
+      
+    - name: Show Maven Test output
+      debug:
+        var: mvn_test_result.stdout_lines
+
+- name: Database Backup Task
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Backup the database (MySQL Db)
+      shell: |
+        docker exec mysql-db mysqldump -uroot -pHello@123 A-TEK_CHANSETHA-db > backup.sql
